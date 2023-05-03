@@ -1,0 +1,57 @@
+void matrizInversa(){
+	float **matriz,**identidad,valor,pivote;
+	int i,j,k;
+	dimensiones medidas;
+	medidas=leerDimensiones();
+	if(medidas.filas==medidas.columnas){
+	matriz=inicializarMatriz(medidas);
+	identidad=inicializarMatriz(medidas);
+	leerMatriz(matriz,medidas);
+	for(i=0;i<medidas.filas;i++){
+		for(j=0;j<medidas.columnas;j++){
+			if(i==j){
+				identidad[i][j]=1;
+			} else {
+				identidad[i][j]=0;
+			}
+		}
+	}
+	for(i=0;i<medidas.filas;i++){
+		for(j=0;j<medidas.columnas;j++){
+			if(i!=j){
+				valor=matriz[j][i]/matriz[i][i];
+				for(k=0;k<medidas.columnas;k++){
+					matriz[j][k]-=(valor*matriz[i][k]);
+					identidad[j][k]-=(valor*identidad[i][k]);
+				}
+			}
+		}
+	}
+	for(i=0;i<medidas.filas;i++){
+		pivote=matriz[i][i];
+		for(j=0;j<medidas.columnas;j++){
+			matriz[i][j]/=pivote;
+			identidad[i][j]/=pivote;
+		}
+	}
+	for(i=medidas.filas-1;i>=0;i--){
+		for(j=medidas.columnas-1;j>=0;j--){
+			if(i!=j){
+				valor=matriz[j][i];
+				for(k=medidas.columnas-1;k>=0;k--){
+					matriz[j][k]-=(valor*matriz[i][k]);
+					identidad[j][k]-=(valor*identidad[i][k]);
+				}
+			}
+		}
+	}
+	puts("La matriz inversa es:\n");
+	imprimirMatriz(identidad,medidas);
+	liberarMemoria(matriz,medidas);
+	liberarMemoria(identidad,medidas);
+	}else{
+		puts("La matriz debe ser cuadrada");
+	}
+	return;
+}
+		
